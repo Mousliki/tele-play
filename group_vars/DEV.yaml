@@ -1,0 +1,4 @@
+---
+teleport_env_node: 'preprod'
+teleport_type_node: 'Development'
+teleport_role_node: 'node'

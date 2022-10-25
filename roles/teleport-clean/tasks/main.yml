@@ -1,0 +1,17 @@
+--- 
+- name: Remove "teleport" package.
+  apt:
+    name: teleport
+    state: absent 
+  when: ( ansible_os_family == 'Debian' ) and ( clean|default(False)|bool )
+
+- name: Remove "teleport" package.
+  yum:
+    name: teleport
+    state: absent 
+  when: ( ansible_os_family == 'RedHat') and ( clean|default(False)|bool )
+
+# - name: Purge teleport config
+#   shell: >   
+#     rm -r {{ teleport_config_path }} {{ teleport_data_dir }}
+#   when: clean|default(False)|bool 

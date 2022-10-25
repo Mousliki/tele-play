@@ -1,0 +1,41 @@
+---   
+DB:  
+  hosts:
+    SRVDEVTH2-MYSQL: 
+      ansible_host: 10.75.6.42
+    SRVDEVTH2-MYBDR1: 
+      ansible_host: 10.75.6.130
+    SRVDEVTH2-MONG2:
+      ansible_host: 10.75.6.43 
+    SRVDEVTH2-MONG1:  
+      ansible_host: 10.75.6.131  
+    SRVMA-MONGODB: 
+      ansible_host: 172.19.45.185
+    SRVGS-MYBDR5: 
+      ansible_host: 10.112.212.69 
+    SRVGS-MYBDR3: 
+      ansible_host: 10.112.0.249    
+
+
+Kube-Preprod:  
+  hosts: 
+    SRVTH2-MASTER: 
+      ansible_host: 10.75.6.44 
+    SRVTH2-APPMS1: 
+      ansible_host: 10.75.6.45 
+    SRVTH2-APPMS2:    
+      ansible_host: 10.75.6.46  
+    SRVTH2-APPNODE1: 
+      ansible_host: 10.75.6.47
+    SRVTH2-APPNODE2: 
+      ansible_host: 10.75.6.48
+    SRVTH2-MSESB: 
+      ansible_host: 10.75.6.50
+    SRVTH2-MSFRONT: 
+      ansible_host: 10.75.6.49 
+
+
+DB-mysqlpro: 
+  hosts: 
+    srvma-mysqlpro: 
+      ansible_host: 172.19.45.241

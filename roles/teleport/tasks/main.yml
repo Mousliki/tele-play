@@ -1,0 +1,84 @@
+---
+- include: ping.yml
+  tags: ping
+
+
+- name: Include OS-specific variables.
+  include_vars: "{{ ansible_os_family }}.yml"  
+  tags: os
+
+
+- name: Check if teleport is installed.
+  stat: "path=/usr/local/bin/teleport"
+  register: teleport_bin 
+
+# - name: Purge teleport 
+#   shell: apt remove --purge teleport -y 
+#   tags: purge
+
+- name: Download teleport.
+  get_url:  
+    url: "{{ teleport_url }}" 
+    dest: /tmp 
+    mode: '0660'  
+    validate_certs: 'no'
+  when: not teleport_bin.stat.exists 
+
+- name: Depackage teleport
+  command: > 
+    chdir=/tmp 
+    dpkg -i teleport_{{ teleport_version }}_amd64.deb 
+  when: not teleport_bin.stat.exists   
+
+- name: Remove teleport package
+  file: 
+    path: /tmp/teleport_{{ teleport_version }}_amd64.deb
+    state: absent
+  when: not teleport_bin.stat.exists 
+
+- name: Generate teleport token node 
+  delegate_to: teleport
+  shell: >   
+    chdir=/tmp
+    tctl tokens add --type=node --ttl=5m | grep -o -P '(?<=token: ).*(?=.)'
+  when: not teleport_bin.stat.exists  
+  register: token_output  
+  tags: token
+
+- set_fact:
+    teleport_auth_token: "{{ token_output.stdout }}"  
+  when: not teleport_bin.stat.exists
+  tags: token 
+
+- debug:
+    msg: "mytoken is: {{ teleport_auth_token }}"  
+  when: not teleport_bin.stat.exists 
+  tags: token
+
+
+- name: Create teleport config.
+  template:
+    src: "teleport.yaml.j2"
+    dest: "{{ teleport_config_path }}"
+    owner: "root"
+    group: "root"
+    mode: 0600
+  when: not teleport_bin.stat.exists
+  tags: template 
+
+- name: Restart Teleport.
+  shell: >   
+    systemctl restart teleport
+  when: restart|default(False)|bool 
+  tags: template
+
+- include: configure-Systemd.yml
+  when: ansible_service_mgr == 'systemd'
+
+- name: Ensure teleport has selected state and enabled on boot.
+  service:
+    name: 'teleport.service'
+    state: 'started'
+
+
+    

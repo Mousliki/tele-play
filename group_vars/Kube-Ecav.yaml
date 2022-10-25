@@ -1,0 +1,4 @@
+---
+teleport_env_node: 'prod'
+teleport_type_node: 'k8s-cluster-ecav' 
+teleport_role_node: 'node'

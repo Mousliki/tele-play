@@ -1,0 +1,4 @@
+---
+teleport_env_node: 'prod'
+teleport_type_node: 'avaya'
+teleport_role_node: 'node'

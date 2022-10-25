@@ -1,0 +1,11 @@
+---
+- hosts: SRVMA-MYSQL
+  become: true   
+  gather_facts: true
+  vars_files:    
+    - files/pass_credentials.vault    
+  # vars:
+  #   ansible_python_interpreter: /usr/bin/python3
+  roles:  
+      - { role: teleport, restart : "True"} 
+      - { role: teleport-clean, clean: "False"}

@@ -1,0 +1,8 @@
+---
+- hosts: gitlab-EE 
+  become: true   
+  gather_facts: true
+  vars_files:    
+    - ../files/inventory_credentials.vault    
+  roles:  
+      - { role: ../../teleport} 
